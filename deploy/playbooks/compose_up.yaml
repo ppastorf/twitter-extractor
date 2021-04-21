@@ -1,0 +1,27 @@
+- hosts: aws
+  become: true
+  tasks:
+    - name: Copiando 'docker-compose.yaml'
+      copy:
+        src: ../docker-compose.yaml
+        dest: /home/ubuntu/gcloud13
+    
+    - name: Copiando configurações do worker
+      copy:
+        src: ../../app/worker-extractor/config
+        dest: /home/ubuntu/gcloud13
+
+    - name: Copiando credenciais do worker
+      copy:
+        src: ../../app/worker-extractor/secret
+        dest: /home/ubuntu/gcloud13
+    
+    - name: Copiando schemas
+      copy:
+        src: ../../app/schemas
+        dest: /home/ubuntu/gcloud13
+
+    - name: Docker compose up
+      command: docker-compose --compatibility up -d
+      args:
+        chdir: /home/ubuntu/gcloud13

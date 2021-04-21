@@ -1,0 +1,25 @@
+- hosts: aws
+  become: true
+  tasks:    
+    - name: Copiando configurações do worker
+      copy:
+        src: ../../app/worker-extractor/config
+        dest: /home/ubuntu/gcloud13
+
+    - name: Copiando credenciais do worker
+      copy:
+        src: ../../app/worker-extractor/secret
+        dest: /home/ubuntu/gcloud13
+
+    - name: Copiando schemas
+      copy:
+        src: ../../app/schemas
+        dest: /home/ubuntu/gcloud13
+
+    - name: Docker compose restart
+      docker_compose:
+        project_src: /home/ubuntu/gcloud13
+        state: present
+        restarted: yes
+        services: 
+          - worker-extractor

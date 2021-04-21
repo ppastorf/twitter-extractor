@@ -1,0 +1,9 @@
+kafka:
+  endpoint: "127.0.0.1:9092"
+  enable_tls: false
+  max_retries: 5
+  sarama_logs: true
+  topics:
+    workload:
+      name: tweet-workload
+      schema: ../schemas/tweet_batch.avsc

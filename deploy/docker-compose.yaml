@@ -1,0 +1,93 @@
+version: '3.3'
+services:
+  db:
+    image: mysql:5.7
+    restart: always
+    deploy:
+      replicas: 1
+      resources:
+        reservations:
+          memory: 128M
+        limits:
+          memory: 250M
+    environment:
+      MYSQL_DATABASE: gcloud13
+      MYSQL_USER: gcloud13
+      MYSQL_PASSWORD:
+      MYSQL_ROOT_PASSWORD:
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "--password=$MYSQL_ROOT_PASSWORD"]
+      interval: 2s
+      timeout: 10s
+      retries: 3
+
+  zookeeper:
+    # https://hub.docker.com/_/zookeeper/
+    image: zookeeper:3.7.0
+    restart: always
+    container_name: zookeeper
+    hostname: zookeeper
+    stdin_open: true
+    tty: true     
+    ports:
+      - 2180:8080
+    environment:
+      ZOO_TICK_TIME: 2000
+      ZOO_MAX_CLIENT_CNXNS: 10
+      ZOO_STANDALONE_ENABLED: "true"
+    healthcheck:
+      test: ["CMD", "zkServer.sh", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  kafka:
+    image: wurstmeister/kafka:2.13-2.7.0
+    container_name: kafka
+    hostname: kafka
+    stdin_open: true
+    tty: true     
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: kafka
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_CREATE_TOPICS: "tweet-workload:1:1"
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENERS: PLAINTEXT://kafka:9092
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test: ["CMD", "bash", "-c", "unset", "JMX_PORT", ";", "kafka-topics.sh", "--zookeeper", "zookeeper:2181", "--list"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+
+  worker-extractor:
+    image: registry.gitlab.com/icmc-ssc0158-2021/2021/gcloud13:worker-extractor-latest
+    container_name: extractor
+    restart: always
+    environment:
+      TWITTER_CREDENTIALS: secret/twitter.yaml
+      EXTRACTOR_CONFIG: config/extractor.yaml
+      WORKLOAD_SCHEMA: schemas/tweet_batch.avsc
+      KAFKA_CONFIG: config/kafka.yaml
+      EXTRACTOR_INTERVAL: 5s
+      KAFKA_ADDRESS: kafka:9092
+      WORKLOAD_TOPIC: tweet-workload
+      SARAMA_LOGS: "true"
+    depends_on:
+      - kafka
+    volumes:
+      - "./config:/config"
+      - "./secret:/secret"
+      - ./schemas:/schemas
+
+volumes:
+  kafka:
+  mysql:

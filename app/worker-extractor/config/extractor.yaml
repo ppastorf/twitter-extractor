@@ -1,0 +1,7 @@
+extractor:
+  interval: 5s
+  # https://developer.twitter.com/en/docs/twitter-api/v1/tweets/search/api-reference/get-search-tweets
+  searchParams:
+    query: "cpi"
+    tweet_mode: extended
+    log_tweet_content: false

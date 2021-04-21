@@ -1,0 +1,89 @@
+{
+    "type": "record",
+    "name": "tweet_batch",
+    "doc": "schema for a tweet batch message",
+    "fields": [
+      { 
+        "name": "id", 
+        "type": "long"
+      },
+      { 
+        "name": "extracted_at",
+        "type": "string" 
+      },
+      { 
+        "name": "size", 
+        "type": "int" 
+      },
+      {
+        "name": "items",
+        "type": {
+          "type": "array",
+          "items": {
+            "name": "tweet",
+            "type": "record",
+            "fields": [
+              { 
+                "name": "created_at",
+                "type": "string" 
+              },
+              { 
+                "name": "id", 
+                "type": "long"
+              },
+              { 
+                "name": "text", 
+                "type": "string" 
+              },
+              {
+                "name": "user_id",
+                "type": "long"
+              },
+              {
+                "name": "retweeted",
+                "type": "boolean"
+              },
+              {
+                "name": "reply_count",
+                "type": "int"
+              },
+              {
+                "name": "retweet_count",
+                "type": "int"
+              },
+              {
+                "name": "favorite_count",
+                "type": "int"
+              },
+              {
+                "name": "lang",
+                "type": "string"
+              },
+              {
+                "name": "user",
+                "type": "record",
+                "fields": [
+                  {
+                    "name": "id",
+                    "type": "long"
+                  },
+                  {
+                    "name": "location",
+                    "type": "string"
+                  },
+                  {
+                    "name": "follower_count",
+                    "type": "int"
+                  },
+                  {
+                    "name": "verified",
+                    "type": "boolean"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }

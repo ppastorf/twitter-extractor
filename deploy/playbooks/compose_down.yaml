@@ -1,0 +1,7 @@
+- hosts: aws
+  become: true
+  tasks:
+    - name: Docker compose down
+      command: docker-compose --compatibility down
+      args:
+        chdir: /home/ubuntu/gcloud13

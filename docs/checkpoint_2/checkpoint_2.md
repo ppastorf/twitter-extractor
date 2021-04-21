@@ -1,31 +1,19 @@
-# Projeto SSC0158 - Grupo 13
-## Especificação
-https://edisciplinas.usp.br/mod/assign/view.php?id=3544468
+## Checkpoint 2
 
-## Integrantes
-- Douglas Tallach, 9292708
-  douglas.tallach@usp.br
-- Juliano Fantozzi, 9791218
-  juliano.fantozzi@usp.br
-- Pedro Pastorello Fernandes, 10262502
-  pedropastorf@usp.br
-- Vinicius Leite Ribeiro, 10388200
-  viniribeiro@usp.br
+#### O que foi feito até o momento
+Até o momento, temos feito:
 
-## Contribuindo
-- Clonar o repo e criar uma branch nova
-    - Cada integrante deve usar branches próprias para codar
-    - Vamos integrar tudo com Merge Requests, será a unica forma de commitar na Master
+**Infra (pasta `deploy/`):**
+1. código em Terraform para provisionamento de infraestrutura na AWS para desenvolvimento
+1. scripts e playbooks de Ansible para provisionamento de recursos nas máquinas hospedeiras
+1. arquivo do Docker compose, que define os containers que executam nas máquinas hospedeiras
+1. container do MySql
+1. container do Apache Kafka (e Zookeeper)
 
-- É uma boa configurar seu usuário e email do git com os definidos na planilha dos grupos
-    - git config --local user.email <email>
-    - git config --local user.name <name>
-
-## Acesso a nossa VM
-- username = gcloud13
-- portas = 21111, 21112, 21113
-
-ssh $username@andromeda.lasdpc.icmc.usp.br -p $porta
+**Código de aplicação (pasta `app/`):**
+- `worker-extractor`:
+  1. busca de informações em lote da API do Twitter
+  1. esquemas Avro e definições para integração com Kafka
 
 #### Execução
 Para executar o que foi desenvolvido até agora, vocês vão precisar de algumas credenciais, que não foram commitadas no repositório por motivos obvios. Vocês podem entrar em contato conosco que podemos passar elas de alguma outra maneira. Vocês também pode usar credenciais próprias para os serviços se quiserem.

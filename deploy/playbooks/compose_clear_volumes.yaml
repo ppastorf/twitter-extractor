@@ -1,0 +1,8 @@
+- hosts: aws
+  become: true
+  tasks:
+    - name: Docker compose remove volumes
+      docker_compose:
+        project_src: /home/ubuntu/gcloud13
+        state: absent
+        remove_volumes: yes

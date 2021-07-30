@@ -1,24 +1,26 @@
-- hosts: aws
+- hosts: all
   become: true
+  vars:
+    app_dir: /home/gcloud13
   tasks:    
     - name: Copiando configurações do worker
       copy:
         src: ../../app/worker-extractor/config
-        dest: /home/ubuntu/gcloud13
+        dest: "{{ app_dir }}"
 
     - name: Copiando credenciais do worker
       copy:
         src: ../../app/worker-extractor/secret
-        dest: /home/ubuntu/gcloud13
+        dest: "{{ app_dir }}"
 
     - name: Copiando schemas
       copy:
         src: ../../app/schemas
-        dest: /home/ubuntu/gcloud13
+        dest: "{{ app_dir }}"
 
     - name: Docker compose restart
       docker_compose:
-        project_src: /home/ubuntu/gcloud13
+        project_src: "{{ app_dir }}"
         state: present
         restarted: yes
         services: 

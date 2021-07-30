@@ -1,11 +1,12 @@
-- hosts: aws
+- hosts: all
   become: true
   vars:
+    app_dir: /home/gcloud13
     host_env:
       MYSQL_PASSWORD: "{{ lookup('env', 'DB_PASSWORD') }}"
       MYSQL_ROOT_PASSWORD: "{{ lookup('env', 'DB_PASSWORD') }}"
       CONTAINER_REGISTRY_URL: registry.gitlab.com
-    container_registry_user:  "{{ lookup('env', 'GITLAB_DEPLOY_USER') }}"
+    container_registry_user:  gcloud13-deploy-token
     container_registry_password: "{{ lookup('env', 'GITLAB_DEPLOY_TOKEN') }}"
   tasks:
     - name: Setando variaveis de ambiente
@@ -54,7 +55,7 @@
 
     - name: Criando diretorio do projeto
       file:
-        path: /home/ubuntu/gcloud13
+        path: "{{ app_dir }}"
         state: directory
       
     - name: Docker login no registry

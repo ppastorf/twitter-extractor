@@ -1,0 +1,8 @@
+all:
+  hosts:
+    vm_lab_01:
+      ansible_host: andromeda.lasdpc.icmc.usp.br
+      ansible_port: 21111
+      ansible_user: gcloud13
+      ansible_password: "{{ lookup('env', 'LAB_SSH_PASS') }}"
+      ansible_sudo_pass: "{{ lookup('env', 'LAB_SSH_PASS') }}"

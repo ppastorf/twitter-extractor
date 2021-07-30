@@ -1,8 +1,10 @@
-- hosts: aws
+- hosts: all
   become: true
+  vars:
+    app_dir: /home/gcloud13
   tasks:
     - name: Docker compose remove volumes
       docker_compose:
-        project_src: /home/ubuntu/gcloud13
+        project_src: "{{ app_dir }}"
         state: absent
         remove_volumes: yes

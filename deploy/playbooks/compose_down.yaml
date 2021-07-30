@@ -1,7 +1,9 @@
-- hosts: aws
+- hosts: all
   become: true
+  vars:
+    app_dir: /home/gcloud13
   tasks:
     - name: Docker compose down
       command: docker-compose --compatibility down
       args:
-        chdir: /home/ubuntu/gcloud13
+        chdir: "{{ app_dir }}"
